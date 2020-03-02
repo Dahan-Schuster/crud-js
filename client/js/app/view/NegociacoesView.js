@@ -1,14 +1,6 @@
-class NegociacoesView {
+class NegociacoesView extends View {
 	
-	constructor(elemento) {
-		this._elemento = elemento
-	}
-	
-	update(negociacaoList) {
-		this._elemento.innerHTML = this._template(negociacaoList)
-	}
-	
-	_template(negociacaoList) {
+	_template(negociacaoListModel) {
 		return `<table class="table table-hover table-bordered">
      				<thead>
 						<tr>
@@ -19,7 +11,7 @@ class NegociacoesView {
     					</tr>
      				</thead>
 				     <tbody>
-						${negociacaoList.negociacoes.map(
+						${negociacaoListModel.negociacoes.map(
 								negociacao => `
 									<tr>
 										<td>${DateHelper.dataParaTexto(negociacao.data)}</td>
@@ -34,7 +26,7 @@ class NegociacoesView {
 				     	<tr>
 					        <th colspan="3">Total</th>
 					        <td>
-								R$ ${negociacaoList.negociacoes.reduce(
+								R$ ${negociacaoListModel.negociacoes.reduce(
 									(total, negociacao) => (total + negociacao.volume)
 								, 0).toFixed(2)}
 							</td>
