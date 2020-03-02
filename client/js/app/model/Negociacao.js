@@ -10,7 +10,7 @@ class Negociacao {  // jshint ignore:line
 	constructor({data, quantidade, valor}) {
 		this._data =  new Date(data ? data.getTime() : null) // instancia uma nova data, previnindo alteração da proprieadade por referência
 		this._quantidade = quantidade || 0
-		this._valor = valor || 0
+		this._valor = parseFloat(valor) || 0
 		Object.freeze(this)
 	}
 	
