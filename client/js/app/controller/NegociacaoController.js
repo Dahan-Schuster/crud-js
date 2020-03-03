@@ -5,7 +5,15 @@ class NegociacaoController {
 		Object.freeze(this)
 	}
 	
-	adiciona(evento) {
+	apagarLista(evento) {
+		evento.preventDefault()
+		CD.negociacaoListModel.esvaziar()
+		CD.negociacoesView.update(CD.negociacaoListModel)
+		CD.mensagemModel.texto = "Lista esvaziada com sucesso!"
+		CD.mensagemView.update(CD.mensagemModel)
+	}
+	
+	adicionar(evento) {
 		evento.preventDefault()
 		CD.negociacaoListModel.adicionar(this._criarNegociacao())
 		CD.negociacoesView.update(CD.negociacaoListModel)

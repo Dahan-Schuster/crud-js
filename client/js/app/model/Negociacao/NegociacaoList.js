@@ -1,4 +1,4 @@
-class NegociacaoList {
+class NegociacaoList{
 	
 	constructor() {
 		this._negociacoes = []
@@ -11,6 +11,10 @@ class NegociacaoList {
 	
 	get negociacoes(){
 		return new Array(...this._negociacoes);
+	}
+	
+	esvaziar() {
+		this._negociacoes = [ ];
 	}
 	
 }
