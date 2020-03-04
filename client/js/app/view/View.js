@@ -5,7 +5,7 @@ class View {
 		// (uma classe filha, mesmo que não implemente um construtor
 		// explicitamente, terá um construtor vazio)
 		if (this.constructor === View) {
-			throw new Error('Classe "View" não pode ser instanciada')
+			throw new ClasseAbstrataError('View')
 		}
 		
 		// Se o código não lançou nenhum erro até agora, então
@@ -16,7 +16,7 @@ class View {
 	}
 	
 	_template() {
-		throw new Error('A função "_template" deve ser implementada por classes View')
+		throw new MetodoAbstradoError('View._template')
 	}
 	
 	update(model) {
