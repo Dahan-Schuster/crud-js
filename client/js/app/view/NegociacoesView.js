@@ -1,6 +1,6 @@
 class NegociacoesView extends View {
 	
-	_template(negociacaoListModel) {
+	_template(negociacaoListModel = new NegociacaoList()) {
 		return `<table class="table table-hover table-bordered">
      				<thead>
 						<tr>
