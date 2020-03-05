@@ -14,10 +14,7 @@ class CD {
 	 */
 	static $ = document.querySelector.bind(document)
 	
-	static negociacaoListModel = new NegociacaoList()
 	static negociacoesView = new NegociacoesView(CD.$('#negociacoes-view'))
-	
-	static mensagemModel = new Mensagem()
 	static mensagemView = new MensagemView(CD.$('#mensagem-view'))
 	
 	static formNegociacoes = CD.$('.form')

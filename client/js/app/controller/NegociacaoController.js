@@ -1,24 +1,21 @@
 class NegociacaoController {
 	
 	constructor() {
-		CD.negociacoesView.update(CD.negociacaoListModel)
+		this.negociacaoListModel = new Proxy(new NegociacaoList(), new NegociacaoListHandler())
+		this.mensagemModel = new Proxy(new Mensagem(), new MensagemHandler())
 		Object.freeze(this)
 	}
 	
 	apagarLista(evento) {
 		evento.preventDefault()
-		CD.negociacaoListModel.esvaziar()
-		CD.negociacoesView.update(CD.negociacaoListModel)
-		CD.mensagemModel.texto = "Lista esvaziada com sucesso!"
-		CD.mensagemView.update(CD.mensagemModel)
+		this.negociacaoListModel.esvaziar()
+		this.mensagemModel.texto = "Lista esvaziada com sucesso!"
 	}
 	
 	adicionar(evento) {
 		evento.preventDefault()
-		CD.negociacaoListModel.adicionar(this._criarNegociacao())
-		CD.negociacoesView.update(CD.negociacaoListModel)
-		CD.mensagemModel.texto = "Negociação cadastrada com sucesso!"
-		CD.mensagemView.update(CD.mensagemModel)
+		this.negociacaoListModel.adicionar(this._criarNegociacao())
+		this.mensagemModel.texto = "Negociação cadastrada com sucesso!"
 		this._limparFormulario()
 	}
 	
