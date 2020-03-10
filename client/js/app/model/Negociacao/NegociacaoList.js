@@ -17,4 +17,10 @@ class NegociacaoList{
 		this._negociacoes = [ ];
 	}
 	
+	getVolumeTotal = () =>
+		this._negociacoes
+		    .reduce((total, negociacao) => (total + negociacao.volume), 0)
+		    .toFixed(2)
+	
+	
 }

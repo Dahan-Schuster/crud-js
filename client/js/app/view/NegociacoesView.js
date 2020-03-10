@@ -26,9 +26,7 @@ class NegociacoesView extends View {
 				     	<tr>
 					        <th colspan="3">Total</th>
 					        <td>
-								R$ ${negociacaoListModel.negociacoes.reduce(
-									(total, negociacao) => (total + negociacao.volume)
-								, 0).toFixed(2)}
+								R$ ${negociacaoListModel.getVolumeTotal()}
 							</td>
 						</tr>
 				     </tfoot>
