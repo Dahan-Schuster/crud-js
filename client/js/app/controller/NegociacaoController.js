@@ -9,13 +9,13 @@ class NegociacaoController {
 	apagarLista(evento) {
 		evento.preventDefault()
 		this.negociacaoListModel.esvaziar()
-		this.mensagemModel.texto = "Lista esvaziada com sucesso!"
+		this.mensagemModel.aviso("Lista esvaziada com sucesso!")
 	}
 	
 	adicionar(evento) {
 		evento.preventDefault()
 		this.negociacaoListModel.adicionar(this._criarNegociacao())
-		this.mensagemModel.texto = "Negociação cadastrada com sucesso!"
+		this.mensagemModel.sucesso("Negociação cadastrada com sucesso!")
 		this._limparFormulario()
 	}
 	
@@ -31,5 +31,4 @@ class NegociacaoController {
 		CD.formNegociacoes.reset()
 		CD.inputData.focus()
 	}
-	
 }

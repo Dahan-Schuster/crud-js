@@ -1,11 +1,11 @@
 class MensagemHandler extends Handler {
 	
 	constructor() {
-		super("texto")
+		super("info", "erro", "aviso", "sucesso")
 	}
 	
-	_interceptarSetPropriedade(mensagemModel, propriedade, valor) {
-		mensagemModel[propriedade] = valor
+	_interceptarMetodo(mensagemModel, propriedade, argumentos) {
+		super._interceptarMetodo(mensagemModel, propriedade, argumentos)
 		CD.mensagemView.update(mensagemModel)
 	}
 	
