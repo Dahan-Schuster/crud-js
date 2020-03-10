@@ -6,6 +6,21 @@ class NegociacaoController {
 		Object.freeze(this)
 	}
 	
+	importarNegociacoes() {
+		let negociacaoAjax = new NegociacaoAjax()
+		negociacaoAjax.importarNegociacoesDaSemana((erro, negociacoes) => {
+			if (erro) {
+				this.mensagemModel.erro(erro)
+				return
+			}
+			
+			negociacoes.forEach(negociacao => {
+				this.negociacaoListModel.adicionar(negociacao)
+				this.mensagemModel.info("Negociações importadas com sucesso!")
+			})
+		})
+	}
+	
 	apagarLista(evento) {
 		evento.preventDefault()
 		this.negociacaoListModel.esvaziar()
