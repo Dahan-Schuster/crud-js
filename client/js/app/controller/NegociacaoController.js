@@ -66,6 +66,10 @@ class NegociacaoController {
 		this._limparFormulario()
 	}
 	
+	ordenarLista(campo) {
+		this.negociacaoListModel.ordenarLista(campo)
+	}
+	
 	_criarNegociacao(objetoLiteral = false) {
 		let objeto = {
 			data      : DateHelper.textoParaData(CD.inputData.value),
