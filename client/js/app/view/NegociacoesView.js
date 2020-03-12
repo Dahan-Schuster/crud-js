@@ -1,13 +1,23 @@
 class NegociacoesView extends View {
 	
 	_template(negociacaoListModel = new NegociacaoList()) {
+		let orderBy = negociacaoListModel.ordenarPor
+		let asc = negociacaoListModel.ordenarAsc
 		return `<table class="table table-hover table-bordered">
      				<thead>
-						<tr>
-							<th>DATA</th>
-							<th>QUANTIDADE</th>
-							<th>VALOR</th>
-							<th>VOLUME</th>
+						<tr class="order-table ${orderBy} ${asc ? 'asc' : 'desc'}">
+							<th class="data" onclick="negociacaoController.ordenarLista('data')">
+								DATA
+							</th>
+					        <th class="qte" onclick="negociacaoController.ordenarLista('quantidade')">
+					        	QUANTIDADE
+					        </th>
+					        <th class="valor" onclick="negociacaoController.ordenarLista('valor')">
+					        	VALOR
+					        </th>
+					        <th class="volume" onclick="negociacaoController.ordenarLista('volume')">
+					        	VOLUME
+					        </th>
     					</tr>
      				</thead>
 				     <tbody>
