@@ -2,6 +2,8 @@ class NegociacaoList{
 	
 	constructor() {
 		this._negociacoes = []
+		this.ordenarPor = '';
+		this.ordenarAsc = true
 	}
 	
 	adicionar(negociacao) {
@@ -15,6 +17,13 @@ class NegociacaoList{
 	
 	esvaziar() {
 		this._negociacoes = [ ];
+	}
+	
+	ordenarLista(campo) {
+		this.ordenarAsc = this.ordenarPor === campo ? !this.ordenarAsc : true
+		this.ordenarPor = campo
+		this._negociacoes.sort((neg1, neg2) =>
+			this.ordenarAsc ? neg1[campo] - neg2[campo] : neg2[campo] - neg1[campo])
 	}
 	
 	getVolumeTotal = () =>

@@ -1,7 +1,7 @@
 class NegociacaoListHandler extends Handler {
 	
 	constructor() {
-		super('adicionar', 'esvaziar', Handler.construtor)
+		super('adicionar', 'esvaziar', 'ordenarLista', Handler.construtor)
 	}
 	
 	_interceptarConstrutor() {
