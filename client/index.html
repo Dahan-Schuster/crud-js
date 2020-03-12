@@ -29,15 +29,26 @@
         </div>
         
         <button class="btn btn-primary" type="submit">Incluir</button>
+        <button onclick="negociacaoController.enviarNegociacao(event)" class="btn btn-primary" type="button" >
+            Enviar para o servidor
+        </button>
     </form>
     
     <div class="text-center">
-        <button onclick="negociacaoController.enviarNegociacao(event)" class="btn btn-primary" type="button" >
-            Enviar dados para servidor
-        </button>
-        <button onclick="negociacaoController.importarNegociacoes()" class="btn btn-primary text-center" type="button">
-            Importar Negociações
-        </button>
+        <div class="dropdown" style="display: inline">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Importar Negociações
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown">
+                <li><a importa-negociacoes href="javascript:void(0)" data-periodo="semana">Semana atual</a></li>
+                <li><a importa-negociacoes href="javascript:void(0)" data-periodo="anterior">Semana anterior</a></li>
+                <li><a importa-negociacoes href="javascript:void(0)" data-periodo="retrasada">Semana retrasada</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="javascript:void(0)" onclick="negociacaoController.importarTodasNegociacoes()">Todas</a></li>
+            </ul>
+        </div>
         <button onclick="negociacaoController.apagarLista(event)" class="btn btn-primary text-center" type="button">
             Apagar
         </button>
@@ -64,7 +75,21 @@
     <script src="js/app/controller/NegociacaoController.js"></script>
     <script src="js/app/services/Ajax/NegociacaoAjax.js"></script>
     <script>
-        let negociacaoController = new NegociacaoController()
+	    let negociacaoController = new NegociacaoController()
+        document.addEventListener("DOMContentLoaded", () => {
+        	for (let link of document.querySelectorAll('[importa-negociacoes]')) {
+        		link.onclick = () => negociacaoController.importarNegociacoes(link.dataset.periodo)
+            }
+	        for (let dropdown of document.querySelectorAll('[data-toggle="dropdown"]')) {
+		        dropdown.onclick = function() {
+		        	for (let dropdownMenu of document.querySelectorAll(`[aria-labelledby="${dropdown.id}"]`)) {
+		        		dropdownMenu.classList.toggle('show')
+                        dropdownMenu.onclick = () => dropdownMenu.classList.toggle('show')
+                    }
+                }
+	        }
+
+        })
     </script>
 </body>
 </html>

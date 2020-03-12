@@ -17,24 +17,40 @@ class NegociacaoController {
 					return
 				}
 				this.mensagemModel.sucesso('Negociação enviada com sucesso!')
-			}, () => this.mensagemModel.info('Enviando negociação...')
+			}, () => this.mensagemModel.info('Enviando negociação...'),
 		)
 	}
 	
-	importarNegociacoes() {
-		this._negociacaoAjax.importarNegociacoesDaSemana(
-			(erro, negociacoes) => {
-				if (erro) {
-					this.mensagemModel.erro(erro)
-					return
-				}
-				
-				negociacoes.forEach(negociacao => {
-					this.negociacaoListModel.adicionar(negociacao)
-					this.mensagemModel.info("Negociações importadas com sucesso!")
-				})
-			}, () => this.mensagemModel.info('Importanto negociações...'),
-		)
+	importarNegociacoes(periodo = 'semana') {
+		this._negociacaoAjax.importarNegociacoes(periodo, () => this._informarInicioImportacao())
+		    .then(negociacoes => this._preencherListaComNegociacoesImportadas(negociacoes))
+		    .catch(erro => this.mensagemModel.erro(erro))
+	}
+	
+	importarTodasNegociacoes() {
+		Promise.all([
+			this._negociacaoAjax.importarNegociacoes('semana', () => this._informarInicioImportacao()),
+			this._negociacaoAjax.importarNegociacoes('anterior'),
+			this._negociacaoAjax.importarNegociacoes('retrasada'),
+		]).then(negociacoes => {
+			let negociacoesFlat = negociacoes.reduce(
+				(negociacoesFlat, negociacoes) => negociacoesFlat.concat(negociacoes), []
+			)
+			this._preencherListaComNegociacoesImportadas(negociacoesFlat)
+		}).catch(erro => this.mensagemModel.erro(erro))
+	}
+	
+	_preencherListaComNegociacoesImportadas(negociacoes) {
+		negociacoes.forEach(negociacao => {
+			this.negociacaoListModel.adicionar(
+				new Negociacao({...negociacao, data: new Date(negociacao.data)}),
+			)
+			this.mensagemModel.info("Negociações importadas com sucesso!")
+		})
+	}
+	
+	_informarInicioImportacao() {
+		this.mensagemModel.info('Importanto negociações...')
 	}
 	
 	apagarLista(evento) {
