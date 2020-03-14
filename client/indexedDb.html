@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Aprendendo IndexedDb</title>
+</head>
+<body>
+<h1>IndexedDB: O banco de dados não relacional dos browsers</h1>
+<h2>Disponível para ser acessado via JS dentro do navegador</h2>
+<script src="js/app/model/Negociacao/Negociacao.js"></script>
+<script src="js/app/model/Negociacao/NegociacaoList.js"></script>
+<script>
+
+    const IDB_VERSAO = 1,
+	      OS_NEGOCIACOES = 'negociacoes';
+
+    // Cria uma requisição de conexão com o IDB, enviando
+    // como parâmetro o nome do banco e sua versão
+    // Para realizar alterações no banco (como adicionar uma nova
+    // Object Store), é necessário alterar a versão
+	const openDBRequest = indexedDB.open('negociacoesDb', IDB_VERSAO)
+
+    // Variável que irá receber uma instância de conexão com o IDB
+	let connection
+
+    // Evento disparado sempre que o banco necessita atualização,
+    // isto é, quando o mesmo é criado ou quando tem sua versão
+    // alterada. Aqui deve estar toda a estrutura do banco
+    openDBRequest.onupgradeneeded = e => {
+    	console.log('onupgradeneeded >', 'Cria ou altera um banco já existente')
+        // semelhante às tabelas de bancos relacionais,
+        // uma Object Store armazena objetos em um banco não relacional
+        let objectStoreConnection = e.target.result
+
+        if (objectStoreConnection.objectStoreNames.contains(OS_NEGOCIACOES)) {
+	        objectStoreConnection.deleteObjectStore(OS_NEGOCIACOES)
+        }
+	    objectStoreConnection.createObjectStore(OS_NEGOCIACOES, { autoIncrement: true })
+    };
+
+    // Evento disparado sempre que a requisição de conexão
+    // com o banco resulta em sucesso. O objeto target.result
+    // do evento guarda uma instância da conexão
+    openDBRequest.onsuccess = e => {
+	    console.log('onsuccess >', 'Conexão obtida com sucesso')
+	    connection = e.target.result
+    };
+
+    // Evento disparado quando a requisição de conexão falha
+    openDBRequest.onerror = e => {
+        console.log('onerror >', 'Ocorreu um erro ao tentar abrir a conexão')
+        console.log(e.target.error)
+    };
+
+    function iniciarTransacao(objectStoreName) {
+	    let transaction = connection.transaction([objectStoreName], 'readwrite')
+	    return transaction.objectStore(objectStoreName)
+    }
+
+    function adicionar() {
+	    let objectStoreNegociacoes = iniciarTransacao(OS_NEGOCIACOES)
+	    let negociacao = new Negociacao({data: new Date(), quantidade: 1, valoe: 200})
+
+	    // lança uma requisição de adição de um novo objeto na Object Store
+	    // e a armazena em uma variável
+	    let addRequest = objectStoreNegociacoes.add(negociacao)
+	    addRequest.onsuccess = e => console.log('Negociação armazenada com sucesso')
+	    addRequest.onerror = e => console.log('Não foi possível armazenar a negociação')
+    }
+    
+    function listarNegociacoes() {
+	    let objectStoreNegociacoes = iniciarTransacao(OS_NEGOCIACOES)
+        let objectStoreIterator = objectStoreNegociacoes.openCursor()
+
+        let negociacaoList = new NegociacaoList()
+        objectStoreIterator.onsuccess = e => {
+            let negociacao,
+                ponteiro = e.target.result
+
+	        if (ponteiro !== null) {
+            	let negociacao = ponteiro.value
+                negociacaoList.adicionar(new Negociacao({
+                    data: negociacao._data,
+                    quantidade: negociacao._quantidade,
+                    valor: negociacao._valor
+                }))
+
+                ponteiro.continue()
+            } else {
+	        	console.log(negociacaoList.negociacoes)
+            }
+        }
+        objectStoreIterator.onerror = e => console.log(e.target.error.name)
+    }
+
+
+</script>
+</body>
+</html>
