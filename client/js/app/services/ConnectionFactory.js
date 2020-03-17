@@ -38,7 +38,7 @@ const ConnectionFactory = (() => {
 				openDBRequest.onsuccess = e => resolve(connection ? connection : novaConexao(e))
 				openDBRequest.onerror = e => {
 					console.log(e.target.error)
-					reject(e.target.error.name)
+					reject('Não foi possível se conectar ao banco de dados.')
 				}
 			})
 			
