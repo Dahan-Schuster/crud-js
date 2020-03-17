@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/estilo.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="container">
 
@@ -59,26 +60,27 @@
 <br>
 <div class="my-5" id="negociacoes-view">
 </div>
+<script src="js/lib/dropdown.js"></script>
 <script src="js/app/error/Errors.js"></script>
 <script src="js/app/services/ConnectionFactory.js"></script>
+<script src="js/app/model/DAO.js"></script>
 <script src="js/app/view/View.js"></script>
 <script src="js/app/view/NegociacoesView.js"></script>
 <script src="js/app/view/MensagemView.js"></script>
 <script src="js/app/helpers/DateHelper.js"></script>
 <script src="js/app/helpers/Container/CD.js"></script>
 <script src="js/app/helpers/AjaxHelper.js"></script>
-<script src="js/app/model/Negociacao/Negociacao.js"></script>
-<script src="js/app/model/Negociacao/NegociacaoList.js"></script>
-<script src="js/app/model/Mensagem/Mensagem.js"></script>
 <script src="js/app/services/Handler/Handler.js"></script>
+<script src="js/app/model/Negociacao/Negociacao.js"></script>
+<script src="js/app/model/Negociacao/NegociacaoDAO.js"></script>
+<script src="js/app/model/Negociacao/NegociacaoList.js"></script>
 <script src="js/app/services/Handler/NegociacaoListHandler.js"></script>
+<script src="js/app/model/Mensagem/Mensagem.js"></script>
 <script src="js/app/services/Handler/MensagemHandler.js"></script>
-<script src="js/app/controller/NegociacaoController.js"></script>
 <script src="js/app/services/Ajax/NegociacaoAjax.js"></script>
-<script src="js/lib/dropdown.js"></script>
+<script src="js/app/controller/NegociacaoController.js"></script>
+<script src="js/lib/justKidding.js"></script>
 <script>
-	(j => (u => (s => (t => (k => ($ => $ + '...')(k + 'kidding'))(t + ' '))(s + 't'))(u + 's'))(j + 'u'))('J')
-
 	let negociacaoController = new NegociacaoController()
 	document.addEventListener("DOMContentLoaded", () => {
 		for (let link of document.querySelectorAll('[importa-negociacoes]')) {
