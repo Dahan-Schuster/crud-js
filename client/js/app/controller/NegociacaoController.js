@@ -12,82 +12,29 @@ class NegociacaoController {
 		this.negociacaoListModel = new Proxy(new NegociacaoList(), new NegociacaoListHandler())
 		this.mensagemModel = new Proxy(new Mensagem(), new MensagemHandler())
 		this._negociacaoAjax = new NegociacaoAjax()
-		Object.freeze(this)
+		ConnectionFactory
+			.getConnection()
+			.then(conexao => this._negociacaoDAO = new NegociacaoDAO(conexao))
+			.then(() => this.listarNegociacoes())
+			.catch(erro => this.mensagemModel.erro(erro))
+			.finally((() => Object.freeze(this)))
 	}
 	
 	/**
-	 * Utiliza a classe NegociacaoAjax para enviar para o server
-	 * uma instância de Negociacao criada a partir do formulário
-	 * @param evento
-	 */
-	enviarNegociacao(evento) {
-		evento.preventDefault()
-		let negociacao = JSON.stringify(NegociacaoController._criarNegociacao(true))
-		this._negociacaoAjax.enviarDados(negociacao,
-			(erro, resposta) => {
-				if (erro) {
-					this.mensagemModel.erro(erro)
-					return
-				}
-				this.mensagemModel.sucesso('Negociação enviada com sucesso!')
-			}, () => this.mensagemModel.info('Enviando negociação...'),
-		)
-	}
-	
-	/**
-	 * Importa do servidor todas as negociações que estejam
-	 * no período enviado por parâmetro (semana|passada|retrasada)
-	 * e apresenta o resultado na tela utilizando as classes
+	 * Utiliza o NegociacaoDAO para buscar do banco de dados
+	 * todas as negociações cadastradas
+	 * Retorna o resultado na tela utilizando as classes
 	 * MensagemView e NegociacoesView
 	 *
-	 * @param periodo
 	 */
-	importarNegociacoes(periodo = 'semana') {
-		this._negociacaoAjax.importarNegociacoes(periodo, () => this._informarInicioImportacao())
-		    .then(negociacoes => this._preencherListaComNegociacoesImportadas(negociacoes))
-		    .catch(erro => this.mensagemModel.erro(erro))
-	}
-	
-	/**
-	 * Utiliza o Promise.all para enviar três requisições
-	 * em sequência para o servidor, listando as negociações
-	 * dos períodos 'semana [atual|passada|retrasada]'
-	 */
-	importarTodasNegociacoes() {
-		Promise.all([
-			this._negociacaoAjax.importarNegociacoes('semana', () => this._informarInicioImportacao()),
-			this._negociacaoAjax.importarNegociacoes('anterior'),
-			this._negociacaoAjax.importarNegociacoes('retrasada'),
-		]).then(negociacoes => {
-			let negociacoesFlat = negociacoes.reduce(
-				(negociacoesFlat, negociacoes) => negociacoesFlat.concat(negociacoes), [],
-			)
-			this._preencherListaComNegociacoesImportadas(negociacoesFlat)
-		}).catch(erro => this.mensagemModel.erro(erro))
-	}
-	
-	/**
-	 * Preenche a classe NegociacoesList com uma lista de instâncias de Negociacao,
-	 * exibindo os novos dados e a mensagem do resultado na tela
-	 *
-	 * @param {array<Negociacao>} negociacoes
-	 * @private
-	 */
-	_preencherListaComNegociacoesImportadas(negociacoes) {
-		negociacoes.forEach(negociacao => {
-			this.negociacaoListModel.adicionar(
-				new Negociacao({...negociacao, data: new Date(negociacao.data)}),
-			)
-			this.mensagemModel.info("Negociações importadas com sucesso!")
-		})
-	}
-	
-	/**
-	 * Exibe na tela a mensagem de que as negociações estão sendo importadas
-	 * @private
-	 */
-	_informarInicioImportacao() {
-		this.mensagemModel.info('Importanto negociações...')
+	listarNegociacoes() {
+		this._negociacaoDAO
+			.listarTodos()
+			.then(negociacaoList => {
+				for (let negociacao of negociacaoList.negociacoes)
+					this.negociacaoListModel.adicionar(negociacao)
+			})
+			.catch(erro => this.mensagemModel.erro(erro))
 	}
 	
 	/**
@@ -113,20 +60,15 @@ class NegociacaoController {
 	 */
 	adicionar(evento) {
 		evento.preventDefault()
-		ConnectionFactory
-			.getConnection()
-			.then(conexao => {
-				let negociacao = NegociacaoController._criarNegociacao()
-				new NegociacaoDAO(conexao)
-					.salvar(negociacao)
-					.then(e => {
-						this.negociacaoListModel.adicionar(negociacao)
-						this.mensagemModel.sucesso("Negociação cadastrada com sucesso!")
-						NegociacaoController._limparFormulario()
-					})
-					.catch(erro => this.mensagemModel.erro(erro))
-			})
-			.catch(erro => this.mensagemModel.erro(erro))
+		let negociacao = NegociacaoController._criarNegociacao()
+		this._negociacaoDAO
+		    .salvar(negociacao)
+		    .then(e => {
+			    this.negociacaoListModel.adicionar(negociacao)
+			    this.mensagemModel.sucesso("Negociação cadastrada com sucesso!")
+			    NegociacaoController._limparFormulario()
+		    })
+		    .catch(erro => this.mensagemModel.erro(erro))
 	}
 	
 	/**
@@ -167,4 +109,80 @@ class NegociacaoController {
 		CD.inputData.focus()
 	}
 	
+	// Operações via AJAX
+	
+	/**
+	 * Utiliza a classe NegociacaoAjax para enviar para o server
+	 * uma instância de Negociacao criada a partir do formulário
+	 * @param evento
+	 */
+	enviarNegociacaoAjax(evento) {
+		evento.preventDefault()
+		let negociacao = JSON.stringify(NegociacaoController._criarNegociacao(true))
+		this._negociacaoAjax.enviarDados(negociacao,
+			(erro, resposta) => {
+				if (erro) {
+					this.mensagemModel.erro(erro)
+					return
+				}
+				this.mensagemModel.sucesso('Negociação enviada com sucesso!')
+			}, () => this.mensagemModel.info('Enviando negociação...'),
+		)
+	}
+	
+	/**
+	 * Importa do servidor todas as negociações que estejam
+	 * no período enviado por parâmetro (semana|passada|retrasada)
+	 * e apresenta o resultado na tela utilizando as classes
+	 * MensagemView e NegociacoesView
+	 *
+	 * @param periodo
+	 */
+	importarNegociacoesAjax(periodo = 'semana') {
+		this._negociacaoAjax.importarNegociacoes(periodo, () => this._informarInicioImportacaoAjax())
+		    .then(negociacoes => this._preencherListaComNegociacoesImportadas(negociacoes))
+		    .catch(erro => this.mensagemModel.erro(erro))
+	}
+	
+	/**
+	 * Utiliza o Promise.all para enviar três requisições
+	 * em sequência para o servidor, listando as negociações
+	 * dos períodos 'semana [atual|passada|retrasada]'
+	 */
+	importarTodasNegociacoesAjax() {
+		Promise.all([
+			this._negociacaoAjax.importarNegociacoes('semana', () => this._informarInicioImportacaoAjax()),
+			this._negociacaoAjax.importarNegociacoes('anterior'),
+			this._negociacaoAjax.importarNegociacoes('retrasada'),
+		]).then(negociacoes => {
+			let negociacoesFlat = negociacoes.reduce(
+				(negociacoesFlat, negociacoes) => negociacoesFlat.concat(negociacoes), [],
+			)
+			this._preencherListaComNegociacoesImportadas(negociacoesFlat)
+		}).catch(erro => this.mensagemModel.erro(erro))
+	}
+	
+	/**
+	 * Preenche a classe NegociacoesList com uma lista de instâncias de Negociacao,
+	 * exibindo os novos dados e a mensagem do resultado na tela
+	 *
+	 * @param {array<Negociacao>} negociacoes
+	 * @private
+	 */
+	_preencherListaComNegociacoesImportadas(negociacoes) {
+		negociacoes.forEach(negociacao => {
+			this.negociacaoListModel.adicionar(
+				new Negociacao({...negociacao, data: new Date(negociacao.data)}),
+			)
+			this.mensagemModel.info("Negociações importadas com sucesso!")
+		})
+	}
+	
+	/**
+	 * Exibe na tela a mensagem de que as negociações estão sendo importadas
+	 * @private
+	 */
+	_informarInicioImportacaoAjax() {
+		this.mensagemModel.info('Importanto negociações...')
+	}
 }

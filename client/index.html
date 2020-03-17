@@ -30,7 +30,7 @@
     </div>
 
     <button class="btn btn-primary" type="submit">Incluir</button>
-    <button onclick="negociacaoController.enviarNegociacao(event)" class="btn btn-primary" type="button">
+    <button onclick="negociacaoController.enviarNegociacaoAjax(event)" class="btn btn-primary" type="button">
         Enviar para o servidor
     </button>
 </form>
@@ -47,7 +47,7 @@
             <li><a importa-negociacoes href="javascript:void(0)" data-periodo="anterior">Semana anterior</a></li>
             <li><a importa-negociacoes href="javascript:void(0)" data-periodo="retrasada">Semana retrasada</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="javascript:void(0)" onclick="negociacaoController.importarTodasNegociacoes()">Todas</a></li>
+            <li><a href="javascript:void(0)" onclick="negociacaoController.importarTodasNegociacoesAjax()">Todas</a></li>
         </ul>
     </div>
     <button onclick="negociacaoController.apagarLista(event)" class="btn btn-primary text-center" type="button">
@@ -84,7 +84,7 @@
 	let negociacaoController = new NegociacaoController()
 	document.addEventListener("DOMContentLoaded", () => {
 		for (let link of document.querySelectorAll('[importa-negociacoes]')) {
-			link.onclick = () => negociacaoController.importarNegociacoes(link.dataset.periodo)
+			link.onclick = () => negociacaoController.importarNegociacoesAjax(link.dataset.periodo)
 		}
 	})
 </script>
