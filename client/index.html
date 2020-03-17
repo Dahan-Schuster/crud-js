@@ -36,20 +36,6 @@
 </form>
 
 <div class="text-center">
-    <div class="dropdown" style="display: inline">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Importar Negociações
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdown">
-            <li><a importa-negociacoes href="javascript:void(0)" data-periodo="semana">Semana atual</a></li>
-            <li><a importa-negociacoes href="javascript:void(0)" data-periodo="anterior">Semana anterior</a></li>
-            <li><a importa-negociacoes href="javascript:void(0)" data-periodo="retrasada">Semana retrasada</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="javascript:void(0)" onclick="negociacaoController.importarTodasNegociacoesAjax()">Todas</a></li>
-        </ul>
-    </div>
     <button onclick="negociacaoController.apagarLista(event)" class="btn btn-primary text-center" type="button">
         Apagar
     </button>

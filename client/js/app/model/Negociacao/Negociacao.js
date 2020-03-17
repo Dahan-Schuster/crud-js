@@ -30,4 +30,8 @@ class Negociacao {  // jshint ignore:line
 		return this._quantidade * this._valor
 	}
 	
+	equals(outraNegociacao) {
+		return JSON.stringify(this) === JSON.stringify(outraNegociacao)
+	}
+	
 }

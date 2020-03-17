@@ -15,9 +15,19 @@ class NegociacaoController {
 		ConnectionFactory
 			.getConnection()
 			.then(conexao => this._negociacaoDAO = new NegociacaoDAO(conexao))
-			.then(() => this.listarNegociacoes())
 			.catch(erro => this.mensagemModel.erro(erro))
-			.finally((() => Object.freeze(this)))
+			.finally(() => Object.freeze(this))
+			.finally(() => this._init())
+	}
+	
+	/**
+	 * Define algumas instruções que devem ser realizadas após a construção do controlador
+	 * @private
+	 */
+	_init() {
+		this.importarTodasNegociacoesAjax()
+		this.listarNegociacoes()
+		setInterval(() => this.importarTodasNegociacoesAjax(), 10000)
 	}
 	
 	/**
@@ -39,7 +49,6 @@ class NegociacaoController {
 	}
 	
 	/**
-	 * TODO: implementar DAO
 	 * Utiliza o NegociacaoDAO para limpar todas as negociações
 	 * salvas no banco de dados
 	 * @param evento
@@ -186,7 +195,7 @@ class NegociacaoController {
 			)
 			.filter(negociacao =>
 				!this.negociacaoListModel.negociacoes.some(negociacaoExistente =>
-					JSON.stringify(negociacao) === JSON.stringify(negociacaoExistente),
+					negociacao.equals(negociacaoExistente),
 				),
 			)
 			.forEach(negociacao => this.negociacaoListModel.adicionar(negociacao))
