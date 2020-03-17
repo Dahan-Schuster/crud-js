@@ -10,6 +10,22 @@ class NegociacaoDAO extends DAO{
 	}
 	
 	/**
+	 * Apaga todas as negociações salvas no banco
+	 *
+	 * @return {Promise}
+	 */
+	apagarTodos() {
+		return new Promise((resolve, reject) => {
+			let requisicao = this.iniciarTransacao().clear()
+			requisicao.onsuccess = e => resolve(e)
+			requisicao.onerror = e => {
+				console.log(e.target.error)
+				reject('Não foi possível finalizar a transação.')
+			}
+		})
+	}
+	
+	/**
 	 * Pesquisa por todas as negociações salvas no banco
 	 * e retorna uma instância de NegociacaoList
 	 *

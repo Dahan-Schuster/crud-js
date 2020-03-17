@@ -45,8 +45,11 @@ class NegociacaoController {
 	 */
 	apagarLista(evento) {
 		evento.preventDefault()
-		this.negociacaoListModel.esvaziar()
-		this.mensagemModel.aviso("Lista esvaziada com sucesso!")
+		this._negociacaoDAO
+		    .apagarTodos()
+		    .then(() => this.negociacaoListModel.esvaziar())
+		    .then(() => this.mensagemModel.aviso("Lista esvaziada com sucesso!"))
+		    .catch(erro => this.mensagemModel.erro(erro))
 	}
 	
 	/**
