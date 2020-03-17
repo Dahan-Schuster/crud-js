@@ -29,12 +29,13 @@ class NegociacaoController {
 	 */
 	listarNegociacoes() {
 		this._negociacaoDAO
-			.listarTodos()
-			.then(negociacaoList => {
-				for (let negociacao of negociacaoList.negociacoes)
-					this.negociacaoListModel.adicionar(negociacao)
-			})
-			.catch(erro => this.mensagemModel.erro(erro))
+		    .listarTodos()
+		    .then(negociacaoList => {
+			    for (let negociacao of negociacaoList.negociacoes) {
+				    this.negociacaoListModel.adicionar(negociacao)
+			    }
+		    })
+		    .catch(erro => this.mensagemModel.erro(erro))
 	}
 	
 	/**
@@ -139,6 +140,8 @@ class NegociacaoController {
 	 * e apresenta o resultado na tela utilizando as classes
 	 * MensagemView e NegociacoesView
 	 *
+	 * Irá ignorar negociações já importadas
+	 *
 	 * @param periodo
 	 */
 	importarNegociacoesAjax(periodo = 'semana') {
@@ -173,12 +176,22 @@ class NegociacaoController {
 	 * @private
 	 */
 	_preencherListaComNegociacoesImportadas(negociacoes) {
-		negociacoes.forEach(negociacao => {
-			this.negociacaoListModel.adicionar(
-				new Negociacao({...negociacao, data: new Date(negociacao.data)}),
+		negociacoes
+			.map(negociacao =>
+				new Negociacao({
+					data      : new Date(negociacao.data),
+					quantidade: negociacao.quantidade,
+					valor     : negociacao.valor,
+				}),
 			)
-			this.mensagemModel.info("Negociações importadas com sucesso!")
-		})
+			.filter(negociacao =>
+				!this.negociacaoListModel.negociacoes.some(negociacaoExistente =>
+					JSON.stringify(negociacao) === JSON.stringify(negociacaoExistente),
+				),
+			)
+			.forEach(negociacao => this.negociacaoListModel.adicionar(negociacao))
+		
+		this.mensagemModel.info("Negociações importadas com sucesso! <small>Negocições repetidas foram ignoradas</small>")
 	}
 	
 	/**
