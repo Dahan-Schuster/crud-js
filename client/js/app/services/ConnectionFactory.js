@@ -1,13 +1,34 @@
+/**
+ * Classe responsável por segurar e retornar uma conexão com o IndexedDB
+ */
 const ConnectionFactory = (() => {
 	
-	const IDB_VERSAO = 1,
-		IDB_NOME = 'NegociacoesDb',
-		OBJECT_STORES = ['negociacoes']
+	/**
+	 * Versão do banco de dados
+	 * @type {number}
+	 */
+	const IDB_VERSAO = 1
+	/**
+	 * Nome do banco de dados
+	 * @type {string}
+	 */
+	const IDB_NOME = 'NegociacoesDb'
+	/**
+	 * Object Stores (tabelas não relacionais) do banco de dados
+	 * @type {string[]}
+	 */
+	const OBJECT_STORES = ['negociacoes']
 	
 	let connection, closeConnection
 	
 	return class ConnectionFactory {
 		
+		/**
+		 * Abre uma nova conexão com o IndexedDB,
+		 * ou retorna uma já existente
+		 *
+		 * @returns {Promise}
+		 */
 		static getConnection() {
 			
 			return new Promise((resolve, reject) => {
@@ -41,6 +62,13 @@ const ConnectionFactory = (() => {
 				})
 			}
 			
+			/**
+			 * Para uso interno do método
+			 * Abre uma nova conexão com o IndexedDB
+			 *
+			 * @param e
+			 * @returns {IDBDatabase}
+			 */
 			function novaConexao(e) {
 				connection = e.target.result
 				closeConnection = connection.close.bind(connection)
@@ -52,6 +80,11 @@ const ConnectionFactory = (() => {
 			
 		}
 		
+		/**
+		 * Método privado que sobrepõe o método IDBDatabase.close
+		 *
+		 * @private
+		 */
 		static _closeConnection() {
 			if (connection) {
 				closeConnection()
