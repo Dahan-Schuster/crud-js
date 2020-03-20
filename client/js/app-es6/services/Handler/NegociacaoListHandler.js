@@ -1,4 +1,7 @@
-class NegociacaoListHandler extends Handler {
+import {Handler} from "./Handler.js"
+import {CD}      from "../../helpers/Container/CD.js"
+
+export class NegociacaoListHandler extends Handler {
 	
 	constructor() {
 		super('adicionar', 'esvaziar', 'ordenarLista', Handler.construtor)

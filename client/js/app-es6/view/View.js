@@ -1,4 +1,6 @@
-class View {
+import {ClasseAbstrataError, MetodoAbstradoError} from "../error/Errors.js"
+
+export class View {
 	
 	constructor(elemento) {
 		// Validar que o construtor não é da classe View

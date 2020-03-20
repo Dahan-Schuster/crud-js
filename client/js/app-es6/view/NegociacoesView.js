@@ -1,4 +1,18 @@
-class NegociacoesView extends View {
+import {View}           from "./View.js"
+import {NegociacaoList} from "../model/Negociacao/NegociacaoList.js"
+import {DateHelper}     from "../helpers/DateHelper.js"
+import {instanciaAtual} from "../controller/NegociacaoController.js"
+
+export class NegociacoesView extends View {
+	
+	constructor(elemento) {
+		super(elemento)
+		elemento.addEventListener('click', function (event) {
+			if (event.target.nodeName === 'TH') {
+				instanciaAtual().ordenarLista(event.target.dataset.orderBy)
+			}
+		})
+	}
 	
 	_template(negociacaoListModel = new NegociacaoList()) {
 		let orderBy = negociacaoListModel.ordenarPor
@@ -6,31 +20,31 @@ class NegociacoesView extends View {
 		return `<table class="table table-hover table-bordered">
      				<thead>
 						<tr class="order-table ${orderBy} ${asc ? 'asc' : 'desc'}">
-							<th class="data" onclick="negociacaoController.ordenarLista('data')">
+							<th data-order-by="data" class="data"">
 								DATA
 							</th>
-					        <th class="qte" onclick="negociacaoController.ordenarLista('quantidade')">
+					        <th data-order-by="quantidade" class="qte"">
 					        	QUANTIDADE
 					        </th>
-					        <th class="valor" onclick="negociacaoController.ordenarLista('valor')">
+					        <th data-order-by="valor" class="valor"">
 					        	VALOR
 					        </th>
-					        <th class="volume" onclick="negociacaoController.ordenarLista('volume')">
+					        <th data-order-by="volume" class="volume"">
 					        	VOLUME
 					        </th>
     					</tr>
      				</thead>
 				     <tbody>
 						${negociacaoListModel.negociacoes.map(
-								negociacao => `
+			negociacao => `
 									<tr>
 										<td>${DateHelper.dataParaTexto(negociacao.data)}</td>
 										<td>${negociacao.quantidade}</td>
 										<td>R$ ${negociacao.valor.toFixed(2)}</td>
 										<td>R$ ${negociacao.volume.toFixed(2)}</td>
 									</tr>
-								`
-						).join('')}
+								`,
+		).join('')}
 				     </tbody>
 				     <tfoot>
 				     	<tr>

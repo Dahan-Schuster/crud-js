@@ -1,4 +1,7 @@
-class MensagemHandler extends Handler {
+import {Handler} from "./Handler.js"
+import {CD}      from "../../helpers/Container/CD.js"
+
+export class MensagemHandler extends Handler {
 	
 	constructor() {
 		super("info", "erro", "aviso", "sucesso")

@@ -1,4 +1,6 @@
-class Handler {
+import {MetodoAbstradoError} from "../../error/Errors.js"
+
+export class Handler {
 	
 	static construtor = 'constructor'
 	

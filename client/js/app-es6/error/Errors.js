@@ -1,4 +1,4 @@
-class ClasseAbstrataError extends Error {
+export class ClasseAbstrataError extends Error {
 	constructor(classe, mensagem) {
 		mensagem = ClasseAbstrataError.formatarMensagem(classe, mensagem)
 		super(mensagem)
@@ -16,7 +16,7 @@ class ClasseAbstrataError extends Error {
 	}
 }
 
-class MetodoAbstradoError extends Error {
+export class MetodoAbstradoError extends Error {
 	constructor(metodo, mensagem) {
 		mensagem = MetodoAbstradoError.formatarMensagem(metodo, mensagem)
 		super(mensagem)

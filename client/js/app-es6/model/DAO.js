@@ -1,4 +1,6 @@
-class DAO {
+import {ClasseAbstrataError} from "../error/Errors.js"
+
+export class DAO {
 	
 	LEITURA_ESCRITA = 'readwrite'
 	LEITURA = 'read'

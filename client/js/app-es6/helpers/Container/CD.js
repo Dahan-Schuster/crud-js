@@ -1,4 +1,7 @@
-class CD {
+import {NegociacoesView} from "../../view/NegociacoesView.js"
+import {MensagemView}    from "../../view/MensagemView.js"
+
+export class CD {
 	
 	/**
 	 * bind: informa que, ao passar o método para outro contexto, deve
@@ -18,6 +21,8 @@ class CD {
 	static mensagemView = new MensagemView(CD.$('#mensagem-view'))
 	
 	static formNegociacoes = CD.$('.form')
+	static btnApagar = CD.$('#btn_apagar')
+	static btnEnviarParaServidor = CD.$('#btn_enviar_para_servidor')
 	static inputQuantidade = CD.$('#quantidade')
 	static inputData = CD.$('#data')
 	static inputValor = CD.$('#valor')

@@ -1,4 +1,4 @@
-class AjaxHelper {
+export class AjaxHelper {
 	
 	static ajax = handler => {
 		if (!handler.url) {

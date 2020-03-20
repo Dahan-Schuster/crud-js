@@ -1,4 +1,4 @@
-class Negociacao {  // jshint ignore:line
+export class Negociacao {
 	
 	/**
 	 * Negociação constructor

@@ -1,4 +1,6 @@
-class NegociacaoList{
+import {Negociacao} from "./Negociacao.js"
+
+export class NegociacaoList{
 	
 	constructor() {
 		this._negociacoes = []
@@ -30,6 +32,5 @@ class NegociacaoList{
 		this._negociacoes
 		    .reduce((total, negociacao) => (total + negociacao.volume), 0)
 		    .toFixed(2)
-	
 	
 }

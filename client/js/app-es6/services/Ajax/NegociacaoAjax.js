@@ -1,4 +1,6 @@
-class NegociacaoAjax {
+import {AjaxHelper} from "../../helpers/AjaxHelper.js"
+
+export class NegociacaoAjax {
 	
 	enviarDados(negociacao, callbackFn, antesDeEnviar) {
 		AjaxHelper.ajax({

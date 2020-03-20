@@ -1,4 +1,8 @@
-class NegociacaoDAO extends DAO{
+import {DAO}            from "../DAO.js"
+import {NegociacaoList} from "./NegociacaoList.js"
+import {Negociacao}     from "./Negociacao.js"
+
+export class NegociacaoDAO extends DAO {
 	
 	/**
 	 * Inicia o NegociacaoDAO

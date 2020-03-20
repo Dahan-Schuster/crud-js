@@ -1,3 +1,14 @@
+import {CD}                    from "../helpers/Container/CD.js"
+import {ConnectionFactory}     from "../services/ConnectionFactory.js"
+import {Negociacao}            from "../model/Negociacao/Negociacao.js"
+import {NegociacaoDAO}         from "../model/Negociacao/NegociacaoDAO.js"
+import {NegociacaoAjax}        from "../services/Ajax/NegociacaoAjax.js"
+import {NegociacaoList}        from "../model/Negociacao/NegociacaoList.js"
+import {NegociacaoListHandler} from "../services/Handler/NegociacaoListHandler.js"
+import {Mensagem}              from "../model/Mensagem/Mensagem.js"
+import {MensagemHandler}       from "../services/Handler/MensagemHandler.js"
+import {DateHelper}            from "../helpers/DateHelper.js"
+
 /**
  * Classe NegociacaoController
  * Responsável por intermediar operações envolvendo
@@ -210,4 +221,9 @@ class NegociacaoController {
 	_informarInicioImportacaoAjax() {
 		this.mensagemModel.info('Importanto negociações...')
 	}
+}
+
+let negociacaoController = new NegociacaoController()
+export function instanciaAtual() {
+	return negociacaoController
 }
