@@ -12,7 +12,7 @@
 
 <h1 class="text-center">Negociações</h1>
 
-<form onsubmit="negociacaoController.adicionar(event)" class="form">
+<form class="form">
 
     <div class="form-group">
         <label for="data">Data</label>
@@ -30,13 +30,13 @@
     </div>
 
     <button class="btn btn-primary" type="submit">Incluir</button>
-    <button onclick="negociacaoController.enviarNegociacaoAjax(event)" class="btn btn-primary" type="button">
+    <button id="btn_enviar_para_servidor" class="btn btn-primary" type="button">
         Enviar para o servidor
     </button>
 </form>
 
 <div class="text-center">
-    <button onclick="negociacaoController.apagarLista(event)" class="btn btn-primary text-center" type="button">
+    <button id="btn_apagar" class="btn btn-primary text-center" type="button">
         Apagar
     </button>
 </div>
@@ -46,33 +46,16 @@
 <br>
 <div class="my-5" id="negociacoes-view">
 </div>
-<script src="js/app/lib/dropdown.js"></script>
-<script src="js/app/error/Errors.js"></script>
-<script src="js/app/services/ConnectionFactory.js"></script>
-<script src="js/app/model/DAO.js"></script>
-<script src="js/app/view/View.js"></script>
-<script src="js/app/view/NegociacoesView.js"></script>
-<script src="js/app/view/MensagemView.js"></script>
-<script src="js/app/helpers/DateHelper.js"></script>
-<script src="js/app/helpers/Container/CD.js"></script>
-<script src="js/app/helpers/AjaxHelper.js"></script>
-<script src="js/app/services/Handler/Handler.js"></script>
-<script src="js/app/model/Negociacao/Negociacao.js"></script>
-<script src="js/app/model/Negociacao/NegociacaoDAO.js"></script>
-<script src="js/app/model/Negociacao/NegociacaoList.js"></script>
-<script src="js/app/services/Handler/NegociacaoListHandler.js"></script>
-<script src="js/app/model/Mensagem/Mensagem.js"></script>
-<script src="js/app/services/Handler/MensagemHandler.js"></script>
-<script src="js/app/services/Ajax/NegociacaoAjax.js"></script>
-<script src="js/app/controller/NegociacaoController.js"></script>
-<script src="js/app-es6/lib/justKidding.js"></script>
+<script src="node_modules/systemjs/dist/system.js"></script>
+<script type="systemjs-importmap">
+    {
+      "imports": {
+        "boot": "./js/app/boot.js"
+      }
+    }
+</script>
 <script>
-	let negociacaoController = new NegociacaoController()
-	document.addEventListener("DOMContentLoaded", () => {
-		for (let link of document.querySelectorAll('[importa-negociacoes]')) {
-			link.onclick = () => negociacaoController.importarNegociacoesAjax(link.dataset.periodo)
-		}
-	})
+	System.import('boot').catch(erro => console.error(erro))
 </script>
 </body>
 </html>
